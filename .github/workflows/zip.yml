@@ -13,13 +13,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Zip folder
-      run: cd .. && zip -r ${{ github.event.repository.name }}/${{ github.event.repository.name }}-${{ steps.tag.outputs.result }}.zip ${{ github.event.repository.name }} -x "${{ github.event.repository.name }}/.git/*" "${{ github.event.repository.name }}/.github/*" "${{ github.event.repository.name }}/releases/*"
+      run: cd .. && zip -r ${{ github.event.repository.name }}/${{ github.event.repository.name }}-${{ steps.tagName.outputs.tag }}.zip ${{ github.event.repository.name }} -x "${{ github.event.repository.name }}/.git/*" "${{ github.event.repository.name }}/.github/*"
     - name: Upload zip to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/release/${{ github.event.repository.name }}-${{ steps.tag.outputs.result }}.zip
-        asset_name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.result }}.zip
+        file: ${{ github.event.repository.name }}-${{ steps.tagName.outputs.tag }}.zip
+        asset_name: ${{ github.event.repository.name }}-${{ steps.tagName.outputs.tag }}.zip
         tag: ${{ github.ref }}
         overwrite: true
         body: "This is my release text"
