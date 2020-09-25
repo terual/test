@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Zip Folder
-      run: zip -r releases/latest.zip ../${{ github.event.repository.name }} -x ".git/*" ".github/*" "releases/*"
+      run: cd .. && zip -r releases/latest.zip ${{ github.event.repository.name }} -x "${{ github.event.repository.name }}/.git/*" "${{ github.event.repository.name }}/.github/*" "${{ github.event.repository.name }}/releases/*"
     - name: Commit 
       run: |
         git config user.name github-actions
