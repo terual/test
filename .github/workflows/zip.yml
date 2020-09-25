@@ -3,19 +3,18 @@ on:
   push:
     branches:
       - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: LS
-      run: ls ..
     - name: Zip Folder
-      run: zip -r releases/latest.zip . -x ".git/*" ".github/*" "releases/*"
+      run: zip -r releases/latest.zip ../${{ github.event.repository.name }} -x ".git/*" ".github/*" "releases/*"
     - name: Commit 
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
-        git commit -m "generated"
+        git commit -m "Generate release"
         git push
