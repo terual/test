@@ -1,4 +1,4 @@
-name: Zip
+name: Zip new release
 on:
   create:
     tags:
