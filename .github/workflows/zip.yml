@@ -2,31 +2,24 @@ name: Zip
 on:
   create:
     tags:
-#on:
-#  push:
-#    branches:
-#      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Get tag
+      id: tag
+      uses: dawidd6/action-get-tag@v1
     - name: Zip folder
-      run: cd .. && zip -r ${{ github.event.repository.name }}/${{ github.event.repository.name }}-${{ steps.tagName.outputs.tag }}.zip ${{ github.event.repository.name }} -x "${{ github.event.repository.name }}/.git/*" "${{ github.event.repository.name }}/.github/*"
+      run: cd .. && zip -r ${{ github.event.repository.name }}/${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip ${{ github.event.repository.name }} -x "${{ github.event.repository.name }}/.git/*" "${{ github.event.repository.name }}/.github/*"
     - name: Upload zip to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.event.repository.name }}-${{ steps.tagName.outputs.tag }}.zip
-        asset_name: ${{ github.event.repository.name }}-${{ steps.tagName.outputs.tag }}.zip
+        file: ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip
+        asset_name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip
         tag: ${{ github.ref }}
         overwrite: true
         body: "This is my release text"
-    #- name: Commit 
-    #  run: |
-    #    git config user.name github-actions
-    #    git config user.email github-actions@github.com
-    #    git add .
-    #    git commit -m "Generate release"
-    #    git push
+
