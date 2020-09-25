@@ -8,11 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: LS
+      run: ls ..
     - name: Zip Folder
-      run: zip -r release.zip . -x ".git/*" ".github/*"
+      run: zip -r releases/latest.zip . -x ".git/*" ".github/*" "releases/*"
     - name: Commit 
       run: |
-        date > generated.txt
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
