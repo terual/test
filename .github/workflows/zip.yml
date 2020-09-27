@@ -1,18 +1,28 @@
-name: Zip new release
+name: Bump tag and zip new release
 on:
-  create:
-    tags:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
     - name: Get tag
       id: tag
       uses: dawidd6/action-get-tag@v1
     - name: Zip folder
-      run: cd .. && zip -r ${{ github.event.repository.name }}/${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip ${{ github.event.repository.name }} -x "${{ github.event.repository.name }}/.git/*" "${{ github.event.repository.name }}/.github/*"
+      run: |
+        zip -r ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip . -x ".git/*" ".github/*"
+        sha1sum "${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip" > sha.txt
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@1.26.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: false
     - name: Upload zip to release
       uses: svenstaro/upload-release-action@v2
       with:
@@ -21,5 +31,4 @@ jobs:
         asset_name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip
         tag: ${{ github.ref }}
         overwrite: true
-        body: "This is my release text"
 
