@@ -50,4 +50,8 @@ xmlstarlet ed --inplace --update "//extensions/plugins/plugin/sha" --value "$SHA
 xmlstarlet ed --inplace --update "//extensions/plugins/plugin/url" --value "$URL" repo.xml
 xmlstarlet ed --inplace --update "//extensions/plugins/plugin/@version" --value "$VERSION" repo.xml
 
-echo "Now commit and push changes, bump release to version $VERSION and upload $ZIPBALL"
+# Commit
+git commit -a -m "$MESSAGE"
+git push
+
+echo "Now bump release to version $VERSION and upload $ZIPBALL"
