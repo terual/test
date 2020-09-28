@@ -5,11 +5,17 @@
 # 2. Run script and make changes to repo.xml, bump version in install.xml and repo.xml
 # 3. Commit changes, bump tag and upload zip to release
 
+if ! command -v xmlstarlet &> /dev/null
+then
+    echo "xmlstarlet could not be found"
+    exit
+fi
+
 # Get new version
 VERSION="$1"
 if [ -z "$VERSION" ]
   then
-    echo "No argument supplied"
+    echo "No version supplied as argument"
 fi
 
 ORIGIN=`git config --get remote.origin.url`
