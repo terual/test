@@ -2,7 +2,7 @@
 <extension>
   <name>PLUGIN_DSDPLAYER</name>
   <module>Plugins::DSDPlayer::Plugin</module>
-  <version>2.9</version>
+  <version>3.0</version>
   <description>PLUGIN_DSDPLAYER_DESC</description>
   <creator>Kimmo, Triode, Ralphy</creator>
   <homepageURL>http://www.daphile.com</homepageURL>
