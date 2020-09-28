@@ -1,11 +1,11 @@
 #!/bin/sh
 
-// Procedure:
-// 1. Make updates to repo
-// 2. Run script and make changes to repo.xml, bump version in install.xml and repo.xml
-// 3. Commit changes, bump tag and upload zip to release
+# Procedure:
+# 1. Make updates to repo
+# 2. Run script and make changes to repo.xml, bump version in install.xml and repo.xml
+# 3. Commit changes, bump tag and upload zip to release
 
-// Get new version
+# Get new version
 VERSION="$1"
 if [ -z "$VERSION" ]
   then
