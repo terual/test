@@ -36,4 +36,4 @@ xmlstarlet ed --inplace --update "//extensions/plugins/plugin/url" --value "$URL
 xmlstarlet ed --inplace --update "//extensions/plugins/plugin/@version" --value "$VERSION" repo.xml
 
 # Todo after running script
-echo "To do: create tag with version $VERSION and upload $ZIPBALL to release"
+echo "To do: commit and push changes, create tag with version $VERSION and upload $ZIPBALL to release"
