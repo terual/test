@@ -12,9 +12,14 @@ if [ -z "$VERSION" ]
     echo "No argument supplied"
 fi
 
-zip -r "projectname-$VERSION.zip" . -x ".git/*" ".github/*" "*.xml"
+ORIGIN=`git config --get remote.origin.url`
+PROJECT=`basename -s .git $ORIGIN`
+ZIPBALL="$PROJECT-$VERSION.zip"
+URL="https://github.com/terual/$PROJECT/releases/download/$VERSION/$ZIPBALL"
 
-SHA = `sha1sum "projectname-$VERSION.zip"`
-xmlstarlet edit --update //repository/sha --value "$SHA" repo.xml
-xmlstarlet edit --update //repository/version --value "$VERSION" repo.xml
-xmlstarlet edit --update //repository/version --value "$VERSION" install.xml
+zip -r "$ZIPBALL" . -x ".git/*" ".github/*" "*.xml"
+SHA = `sha1sum "$ZIPBALL"`
+
+xmlstarlet edit --update "//extensions/plugins/plugin/sha" --value "$SHA" repo.xml
+xmlstarlet edit --update "//extensions/plugins/plugin/url" --value "$URL" repo.xml
+xmlstarlet edit --update "//extensions//plugins/plugin/@version" --value "$VERSION" repo.xml
