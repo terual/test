@@ -30,7 +30,7 @@ xmlstarlet ed --inplace --update "//extension/version" --value "$VERSION" instal
 
 # Then zip plugin and update repo.xml
 zip -r "$ZIPBALL" . -x ".git/*" ".github/*" ".gitignore" "repo.xml" "*.zip" "*.sh" &> /dev/null
-SHA=`sha1sum "$ZIPBALL"`
+SHA=`sha1sum "$ZIPBALL" | awk '{ print $1 }'`
 xmlstarlet ed --inplace --update "//extensions/plugins/plugin/sha" --value "$SHA" repo.xml
 xmlstarlet ed --inplace --update "//extensions/plugins/plugin/url" --value "$URL" repo.xml
 xmlstarlet ed --inplace --update "//extensions/plugins/plugin/@version" --value "$VERSION" repo.xml
