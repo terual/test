@@ -20,12 +20,20 @@ fi
 
 ORIGIN=`git config --get remote.origin.url`
 PROJECT=`basename -s .git $ORIGIN`
+echo "Creating release for '$PROJECT' with version '$VERSION'"
+
 ZIPBALL="$PROJECT-$VERSION.zip"
 URL="https://github.com/terual/$PROJECT/releases/download/$VERSION/$ZIPBALL"
 
-zip -r "$ZIPBALL" . -x ".git/*" ".github/*" "*.xml"
-SHA=`sha1sum "$ZIPBALL"`
+# First update version in install.xml
+xmlstarlet ed --inplace --update "//extension/version" --value "$VERSION" install.xml
 
-xmlstarlet edit --update "//extensions/plugins/plugin/sha" --value "$SHA" repo.xml > repo.xml
-xmlstarlet edit --update "//extensions/plugins/plugin/url" --value "$URL" repo.xml > repo.xml
-xmlstarlet edit --update "//extensions//plugins/plugin/@version" --value "$VERSION" repo.xml > repo.xml
+# Then zip plugin and update repo.xml
+zip -r "$ZIPBALL" . -x ".git/*" ".github/*" ".gitignore" "repo.xml" "*.zip" "*.sh" &> /dev/null
+SHA=`sha1sum "$ZIPBALL"`
+xmlstarlet ed --inplace --update "//extensions/plugins/plugin/sha" --value "$SHA" repo.xml
+xmlstarlet ed --inplace --update "//extensions/plugins/plugin/url" --value "$URL" repo.xml
+xmlstarlet ed --inplace --update "//extensions/plugins/plugin/@version" --value "$VERSION" repo.xml
+
+# Todo after running script
+echo "To do: create tag with version $VERSION and upload $ZIPBALL to release"
