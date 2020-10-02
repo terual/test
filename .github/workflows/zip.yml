@@ -13,11 +13,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Zip plugin
+      - name: Zip plugin and update repo.xml
         run: |
           zip -r ${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip . -x ".git/*" ".github/*" "repo.xml"
           export SHA1SUM=`sha1sum "${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip"`
-          perl -pE 'foreach my $var ( keys %ENV ) { s/\$\{\Q$var\E}/$ENV{$var}/g }' <repo.xml >repo.xml
+          export URL="https://github.com/${{ github.event.repository.owner }}/${{ github.event.repository.name }}/releases/download/${{ github.event.inputs.version }}/${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip"
+          python -c "from xml.etree import ElementTree as et; tree = et.parse('repo.xml'); tree.find('extensions/plugins/plugin/sha').text = '$SHA1SUM'; tree.find('extensions/plugins/plugin/url').text = '$URL'; tree.write('repo.xml')"
       - name: Commit changes
         run: |
           git config user.name github-actions
