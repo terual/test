@@ -45,36 +45,3 @@ jobs:
           asset_path: ./${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip
           asset_name: ${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip
           asset_content_type: application/zip
-          
-# name: Bump tag and zip new release
-# on:
-#   push:
-#     branches:
-#       - master
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v2
-#       with:
-#         fetch-depth: '0'
-#     - name: Zip folder
-#       run: |
-#         zip -r ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip . -x ".git/*" ".github/*"
-#         sha1sum "${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip" > sha.txt
-#     - name: Bump version and push tag
-#       uses: anothrNick/github-tag-action@1.26.0
-#       id: tag
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         WITH_V: false
-#     - name: Upload zip to release
-#       uses: svenstaro/upload-release-action@v2
-#       with:
-#         repo_token: ${{ secrets.GITHUB_TOKEN }}
-#         file: ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip
-#         asset_name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip
-#         tag: ${{ github.ref }}
-#         overwrite: true
-
