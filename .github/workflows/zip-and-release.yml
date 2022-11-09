@@ -34,7 +34,8 @@ jobs:
           git push
           
       - name: Create release
-        uses: actions/github-script@v5
+        id: create_release
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -51,7 +52,10 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-
+            
+      - name: Get result
+        run: echo "${{ steps.create_release.outputs.result }}"
+  
       - name: Upload Release Asset
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
