@@ -39,32 +39,24 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            try {
-              const createReleaseResponse = await github.rest.repos.createRelease({
-                draft: false,
-                generate_release_notes: false,
-                name: 'Release ${{ github.event.inputs.version }}',
-                owner: context.repo.owner,
-                prerelease: false,
-                repo: context.repo.repo,
-                tag_name: '${{ github.event.inputs.version }}',
-              });
-            } catch (error) {
-              core.setFailed(error.message);
-            }
+            const createReleaseResponse = await github.rest.repos.createRelease({
+              draft: false,
+              generate_release_notes: false,
+              name: 'Release ${{ github.event.inputs.version }}',
+              owner: context.repo.owner,
+              prerelease: false,
+              repo: context.repo.repo,
+              tag_name: '${{ github.event.inputs.version }}',
+            });
             
             const {
               data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl }
             } = createReleaseResponse;
             
-            try {
-              await github.rest.repos.uploadReleaseAsset({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: releaseId,
-                name: '${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip',
-                data: fs.readFileSync('./${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip'),
-              });
-            } catch (error) {
-              core.setFailed(error.message);
-            }
+            await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
+              name: '${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip',
+              data: fs.readFileSync('./${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip'),
+            });
