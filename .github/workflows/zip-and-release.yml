@@ -40,7 +40,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             try {
-              await github.rest.repos.createRelease({
+              const createReleaseResponse = await github.rest.repos.createRelease({
                 draft: false,
                 generate_release_notes: false,
                 name: 'Release ${{ github.event.inputs.version }}',
@@ -53,16 +53,18 @@ jobs:
               core.setFailed(error.message);
             }
             
-      - name: Get result
-        run: echo "${{ steps.create_release.outputs.result }}"
-  
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip
-          asset_name: ${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip
-          asset_content_type: application/zip
+            const {
+              data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl }
+            } = createReleaseResponse;
+            
+            try {
+              await github.rest.repos.uploadReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: releaseId,
+                name: '${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip',
+                data: fs.readFileSync('./${{ github.event.repository.name }}-${{ github.event.inputs.version }}.zip'),
+              });
+            } catch (error) {
+              core.setFailed(error.message);
+            }
