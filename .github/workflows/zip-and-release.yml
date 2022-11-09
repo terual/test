@@ -15,7 +15,7 @@ jobs:
         run: sudo apt-get --no-install-recommends -yq install xmlstarlet
         
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         
       - name: Zip plugin and update repo.xml
         run: |
@@ -33,16 +33,24 @@ jobs:
           git commit -a -m "Release ${{ github.event.inputs.version }}"
           git push
           
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create release
+        uses: actions/github-script@v5
         with:
-          tag_name: ${{ github.event.inputs.version }}
-          release_name: Release ${{ github.event.inputs.version }}
-          draft: false
-          prerelease: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              await github.rest.repos.createRelease({
+                draft: false,
+                generate_release_notes: false,
+                name: Release ${{ github.event.inputs.version }},
+                owner: context.repo.owner,
+                prerelease: false,
+                repo: context.repo.repo,
+                tag_name: ${{ github.event.inputs.version }},
+              });
+            } catch (error) {
+              core.setFailed(error.message);
+            }
 
       - name: Upload Release Asset
         id: upload-release-asset 
