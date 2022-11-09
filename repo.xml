@@ -4,13 +4,13 @@
     <title lang="EN">Terual's Squeezecenter Plugins</title>
   </details>
   <plugins>
-    <plugin maxTarget="8.*" minTarget="7.9" name="DSDPlayer" target="unix" version="3.7">
+    <plugin maxTarget="8.*" minTarget="7.9" name="DSDPlayer" target="unix" version="3.8">
       <title lang="EN">DSDPlayer</title>
       <desc lang="EN">Playback of DSD files (.dsf and .dff) via your Squeezebox.  Supports conversion to PCM or playback as DSD-over-PCM (DoP) for DACs supporting DoP.</desc>
       <creator>Kimmo, Triode</creator>
       <email>triode1@btinternet.com</email>
-      <url>https://github.com/terual/test/releases/download/3.7/test-3.7.zip</url>
-      <sha>6901b1f7470c4dfee378e330b843ecd16d67aa45</sha>
+      <url>https://github.com/terual/test/releases/download/3.8/test-3.8.zip</url>
+      <sha>fdef5048313877dfcd42cb0f29cdbed5a913e0e0</sha>
     </plugin>
   </plugins>
 </extensions>
