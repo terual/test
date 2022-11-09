@@ -42,11 +42,11 @@ jobs:
               await github.rest.repos.createRelease({
                 draft: false,
                 generate_release_notes: false,
-                name: Release ${{ github.event.inputs.version }},
+                name: 'Release ${{ github.event.inputs.version }}',
                 owner: context.repo.owner,
                 prerelease: false,
                 repo: context.repo.repo,
-                tag_name: ${{ github.event.inputs.version }},
+                tag_name: '${{ github.event.inputs.version }}',
               });
             } catch (error) {
               core.setFailed(error.message);
